@@ -1,6 +1,9 @@
 Homework 2
 ================
 
+THIS IS STILL A WORK IN PROGRESS
+--------------------------------
+
 You are currently in the GitHub repository (repo) for `HW-2`. You must have completed all the steps in [Setting Up](https://rudeboybert.github.io/MATH216/jekyll/update/2016/09/12/getting-started.html).
 
 Learning Goals

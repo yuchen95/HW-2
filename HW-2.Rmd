@@ -1,0 +1,42 @@
+---
+title: "MATH 216 Homework 2"
+author: "WRITE YOUR NAME HERE"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    collapsed: false
+    smooth_scroll: false
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+# For read_csv() command, which is an improved version of base R's read.csv()
+library(readr) 
+
+# Load data sets. Note this assumes this .Rmd files is in the same directory as
+# the .csv files.
+
+```
+
+
+
+
+
+## Admistrative:
+
+Please indicate
+
+* Who you collaborated with:
+* Roughly how much time you spent on this HW so far:
+* The URL of the RPubs published URL [here](https://www.nhl.com/).
+* What gave you the most trouble:
+* Any comments you have:
+
+
+
+
+
+## Question 1:
+

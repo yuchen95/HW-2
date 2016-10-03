@@ -12,12 +12,15 @@ output:
 ```{r, echo=FALSE, message=FALSE}
 library(ggplot2)
 library(dplyr)
-# For read_csv() command, which is an improved version of base R's read.csv()
 library(readr) 
+```
 
-# Load data sets. Note this assumes this .Rmd files is in the same directory as
-# the .csv files.
 
+```{r, echo=FALSE, message=FALSE, cache=TRUE}
+# Do not edit this code block. By setting cache=TRUE, we are saving the output
+# this block to the cache, and after the first Knit, this data will load much
+# quicker
+profiles <- read_csv(file="profiles.csv")
 ```
 
 

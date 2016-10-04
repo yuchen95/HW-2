@@ -17,13 +17,11 @@ library(readr)
 
 
 ```{r, echo=FALSE, message=FALSE, cache=TRUE}
-# Do not edit this code block. By setting cache=TRUE, we are saving the output
-# this block to the cache, and after the first Knit, this data will load much
-# quicker
+# Do not edit this code block. By setting cache=TRUE, we are saving the output 
+# of this block to the cache. That way it only needs to run once.  This is
+# especially useful for portions of code that take a long time to run.
 profiles <- read_csv(file="profiles.csv")
 ```
-
-
 
 
 
@@ -39,7 +37,26 @@ Please indicate
 
 
 
-
-
 ## Question 1:
+
+Perform an Exploratory Data Analysis (EDA) on the `profiles` data set,
+specifically on the relationship between gender and
+
+* `income`
+* `job`
+* One more variable of your choice, keeping in mind in HW-3, you will be fitting
+a logistic regression to predict gender.
+
+```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
+
+```
+
+
+
+## Question 2:
+
+In the file `HW-2_Shiny_App.Rmd`, build the Shiny App discussed in Lec09 on Monday 10/3:
+
+* `movies`
+*
 

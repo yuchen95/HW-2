@@ -44,8 +44,10 @@ specifically on the relationship between gender and
 
 * `income`
 * `job`
-* One more variable of your choice, keeping in mind in HW-3, you will be fitting
-a logistic regression to predict gender.
+* One more categorical variable of your choice
+
+all keeping in mind in HW-3, you will be fitting a logistic regression to
+predict a user's gender based on these variables.
 
 ```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
 
@@ -55,8 +57,12 @@ a logistic regression to predict gender.
 
 ## Question 2:
 
-In the file `HW-2_Shiny_App.Rmd`, build the Shiny App discussed in Lec09 on Monday 10/3:
+In the file `HW-2_Shiny_App.Rmd`, build the Shiny App discussed in Lec09 on
+Monday 10/3: Using the `movies` data set in the `ggplot2movies` data set, make a
+Shiny app that
 
-* `movies`
-*
+* Plots budget on the x-axis and rating on the y-axis
+* Instead of having a radio button to select the genre of movie (`Action`,
+`Animation`, `Comedy`, etc), have a radio button that allows you to toggle
+between comedies and non-comedies. This app should be simpler.
 

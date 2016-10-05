@@ -7,7 +7,6 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## THIS IS STILL A WORK IN PROGRESS
 
 You are currently in the GitHub repository (repo) for `HW-2`. You must have
 completed all the steps in [Setting 
@@ -32,8 +31,10 @@ preliminary analysis tool for
 * Loosely speaking, any method of looking at data that does not include formal 
 statistical modeling and inference falls under the term EDA. It is just as, if
 not more, important as an actual analysis.
-* 
-
+* Working with categorical variables, especially when the cateogories are super
+messy.
+* Answering open-ended questions with no explicit "finish line". I have set some
+boundaries however so that you can't get too lost.
 
 
 
@@ -86,5 +87,3 @@ unzip(temp_zip_file, "profiles.csv")
 
 
 ## Tips
-
-1. 

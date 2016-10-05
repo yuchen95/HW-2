@@ -1,9 +1,6 @@
 Homework 2
 ================
 
-THIS IS STILL A WORK IN PROGRESS
---------------------------------
-
 You are currently in the GitHub repository (repo) for `HW-2`. You must have completed all the steps in [Setting Up](https://rudeboybert.github.io/MATH216/jekyll/update/2016/09/12/getting-started.html).
 
 Learning Goals
@@ -16,6 +13,8 @@ Learning Goals
     -   determining relationships among the explanatory variables, and
     -   assessing the direction and rough size of relationships between explanatory and outcome variables.
 -   Loosely speaking, any method of looking at data that does not include formal statistical modeling and inference falls under the term EDA. It is just as, if not more, important as an actual analysis.
+-   Working with categorical variables, especially when the cateogories are super messy.
+-   Answering open-ended questions with no explicit "finish line". I have set some boundaries however so that you can't get too lost.
 
 Homework
 --------
@@ -51,5 +50,3 @@ unzip(temp_zip_file, "profiles.csv")
 
 Tips
 ----
-
-1.

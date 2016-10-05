@@ -68,7 +68,7 @@ to the public. Also included are essay question response data in variables
 [here](https://github.com/rudeboybert/JSE_OkCupid/blob/master/okcupid_codebook.txt).
 Note:
 
-* Usernames were excluded from data set. This is **not** a guarantee of de-anonymization.
+* Usernames were excluded from data set. However, this is **not** a guarantee of de-anonymization.
 * Permission to use this data was granted from OkCupid.
 
 Run the following code once to download the OkCupid data from GitHub into your 

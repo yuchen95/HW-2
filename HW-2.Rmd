@@ -1,6 +1,6 @@
 ---
 title: "MATH 216 Homework 2"
-author: "WRITE YOUR NAME HERE"
+author: "Yuchen Zhu"
 output:
   html_document:
     toc: true
@@ -12,7 +12,9 @@ output:
 ```{r, echo=FALSE, message=FALSE}
 library(ggplot2)
 library(dplyr)
-library(readr) 
+library(readr)
+library(forcats)
+library(ggplot2movies)
 ```
 
 
@@ -30,9 +32,9 @@ profiles <- read_csv(file="profiles.csv")
 Please indicate
 
 * Who you collaborated with:
-* Roughly how much time you spent on this HW so far:
-* The URL of the RPubs published URL [here](https://www.nhl.com/).
-* What gave you the most trouble:
+* Roughly how much time you spent on this HW so far: 4
+* The URL of the RPubs published URL [here](http://rpubs.com/ZhuYuchen/HW-2).
+* What gave you the most trouble: Reorder, debating what info to include
 * Any comments you have:
 
 
@@ -49,20 +51,177 @@ specifically on the relationship between gender and
 all keeping in mind in HW-3, you will be fitting a logistic regression to
 predict a user's gender based on these variables.
 
-```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
+First, we can create a dummy variable for sex called "is_female" and convert last_online into date format, which might come in handy in some situations.
 
+```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
+# Define an indicator variable is_female
+profiles <- profiles %>%
+  mutate(is_female = ifelse(sex=="f", 1, 0)) %>%
+  mutate(
+    last_online = stringr::str_sub(last_online, 1, 10),
+    last_online = lubridate::ymd(last_online)
+  ) %>% 
+  mutate(job = fct_recode(job,
+                          "Art" = "artistic / musical / writer",
+                          "Bank" = "banking / financial / real estate",
+                          "Adm" = "clerical / administrative",
+                          "Comp." = "computer / hardware / software",
+                          "Build" = "construction / craftsmanship",
+                          "Edu" = "education / academia",
+                          "Media" = "entertainment / media",
+                          "Mgmt" =  "executive / management",
+                          "Travel" = "hospitality / travel",
+                          "Law" =  "law / legal services",
+                          "Med" = "medicine / health",
+                          "Mil" = "military",
+                          "Other" = "other",
+                          "Gov" = "political / government",
+                          "Conf." =  "rather not say",
+                          "Retired" = "retired",
+                          "Biz" = "sales / marketing / biz dev",
+                          "Tech" =  "science / tech / engineering",
+                          "Stu." = "student",
+                          "Trans" = "transportation",
+                          "Unemp" = "unemployed"
+                           )) %>% 
+  mutate(body_type = fct_recode(body_type,
+                                "Extra" = "a little extra",
+                                "Over" = "overweight",
+                                "Sec." = "rather not say"
+                                ))
+                          
 ```
 
+### Income:
 
+```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
+# Filter out income = -1 since it means income is not available
+# and the outliers >= 250000, which are implausible self-reported income
+profiles_income <- profiles %>% 
+  select(sex, income) %>% 
+  filter(income >= 0 & income <= 250000)
 
-## Question 2:
+# Boxplot to see how they compare
+p_income_box <- ggplot(data = profiles_income, aes(x = sex, y = income))
+p_income_box +
+  geom_boxplot() +
+  labs(title = "Income for Each Gender")
 
-In the file `HW-2_Shiny_App.Rmd`, build the Shiny App discussed in Lec09 on
-Monday 10/3: Using the `movies` data set in the `ggplot2movies` data set, make a
-Shiny app that
+# Proportion of each gender for each income level
+prop_sex_income <- profiles_income %>% 
+  group_by(sex, income) %>% 
+  tally() %>%  
+  group_by(income) %>% 
+  mutate(prop = n/sum(n))
 
-* Plots budget on the x-axis and rating on the y-axis
-* Instead of having a radio button to select the genre of movie (`Action`,
-`Animation`, `Comedy`, etc), have a radio button that allows you to toggle
-between comedies and non-comedies. This app should be simpler.
+# Barcharts to see the distribution of income for both gender
+p_income_bar <- 
+  ggplot(data = profiles_income, aes(x = income, y = ..density..))
+p_income_bar +
+  geom_histogram(binwidth = 10000) +
+  facet_wrap(~sex, ncol=1) +
+  labs(title = "Income Distribution for Each Gender")
+
+# Barchart to show the proportion of each gender in each income level
+p_income_bar <- 
+  ggplot(data = prop_sex_income, aes(x = income, y = prop, fill = sex))
+p_income_bar +
+  geom_bar(position = "dodge", stat = "identity") +
+  labs(title = "Proportion of each gender for each income level")
+
+# Side-by-side barcharts comparing the proportion of each gender 
+# in each income level
+ggplot(data = prop_sex_income, aes(x = sex, y = prop, fill = sex)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~income, scales="free_y", ncol = 5) +
+  labs(title = "Proportion of Males and Females by Income Level", 
+       x = "Gender", y = "Proportion")
+
+# Proportion of someone being female given an income
+prop_female_income <- profiles %>% 
+  select(is_female, income) %>% 
+  filter(income >= 0 & income <= 250000) %>% 
+  group_by(income) %>% 
+  summarise(prop_female = mean(is_female))
+```
+
+```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
+p_prop_female_income <- 
+  ggplot(data=prop_female_income, aes(income, prop_female))
+p_prop_female_income +
+  geom_line() +
+  labs(title = "Proportion of being female given an income",
+       y = "Proportion of Being Female")
+```
+
+### Job:
+
+```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
+# Data cleaning: filtering out NAs
+# Calculate the proportion of male and female in each profession
+prop_sex_job <- profiles %>% 
+  select(sex, job) %>% 
+  filter(!is.na(job)) %>%
+  group_by(sex, job) %>% 
+  tally() %>%  
+  group_by(job) %>% 
+  mutate(prop = n/sum(n))
+  # Mutate for reordering
+```
+
+```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=9}
+# Barchart showing the proportion of each gender in each profession
+# Better way to reorder? (but two graphs also need to match)
+# Use position = "fill"? (can't see job)
+# Job name too long
+ggplot(data = prop_sex_job, aes(
+  x = fct_reorder(job, prop), y = prop, fill = sex)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  # facet_wrap(~sex, nrow = 2) +
+  labs(title = "Proportion of Each Gender in Each Profession", 
+       x = "Profession", y = "Proportion") +
+  coord_flip()
+```
+
+```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
+# Side-by-side barcharts comparing the proportion of each gender 
+# for each profession
+ggplot(data = prop_sex_job, aes(x = sex, y = prop, fill = sex)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~job, scales="free_y", ncol = 7) +
+  labs(title = "Proportion of Males and Females in Each Industry", 
+       x = "Gender", y = "Proportion")
+```
+
+### Body Type:
+
+```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}
+# Data cleaning: filtering out NAs
+# Calculate the proportion of male and female for each body type
+prop_female_body <- profiles %>% 
+  select(sex, body_type) %>% 
+  filter(!is.na(body_type)) %>%
+  group_by(sex, body_type) %>% 
+  tally() %>% 
+  group_by(body_type) %>%
+  mutate(prop = n/sum(n))
+
+# Barchart showing the proportion of each gender in each profession
+# Better way to reorder? (but two graphs also need to match)
+ggplot(data = prop_female_body, 
+       aes(x = body_type, y = prop, fill = sex)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  # facet_wrap(~sex, nrow = 2) +
+  labs(title = "Proportion of Each Gender in Each Body Type", 
+     x = "Body Type", y = "Proportion") +
+  coord_flip()
+  
+# Side-by-side barcharts comparing the proportion of each gender 
+# for each body type
+ggplot(data = prop_female_body, aes(x = sex, y = prop, fill = sex)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~body_type, scales="free_y", ncol = 6) +
+  labs(title = "Proportion of Males and Females in Each Body Type", 
+       x = "Gender", y = "Proportion")
+```
 

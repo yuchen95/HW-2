@@ -1,6 +1,6 @@
 ---
 title: "MATH 216 Homework 2 Shiny App"
-author: "WRITE YOUR NAME HERE"
+author: "Yuchen Zhu"
 output: html_document
 runtime: shiny
 ---
@@ -14,34 +14,33 @@ library(ggplot2movies)
 ```
 
 
-## Inputs and Outputs
+## Question 2:
 
-You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change.  This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny `renderPlot` function. The `selectInput` and `sliderInput` functions create the input widgets used to drive the plot.
+In the file `HW-2_Shiny_App.Rmd`, build the Shiny App discussed in Lec09 on
+Monday 10/3: Using the `movies` data set in the `ggplot2movies` data set, make a Shiny app that
+
+* Plots budget on the x-axis and rating on the y-axis
+* Instead of having a radio button to select the genre of movie (`Action`,  `Animation`, `Comedy`, etc), have a radio button that allows you to toggle
+between comedies and non-comedies. This app should be simpler.
 
 ```{r eruptions, echo=FALSE}
 inputPanel(
-  
-  # Input name
-  textInput("name", label = "Enter Name:", value="Jane"),
-  # Input start year
-  numericInput("start_year", label = "Start Year:", value = 1880, min = 1880, max = 2014, step = 1),
-  # Input end year
-  numericInput("end_year", label = "End Year:", value = 2014, min = 1880, max = 2014, step = 1)
-  
+  radioButtons("genre", label = "Genre:",
+               choices = c("Comedy", "Non_Comedy"), selected = "Comedy")
 )
 
 renderPlot({
   
-  # Pretend Inputs
-  input_name <- "Albert"
-  input_start_year <- 1880
-  input_end_year <- 2014
+  movies <- ggplot2movies::movies %>% 
+    mutate(Non_Comedy = ifelse(Comedy != 1, 1, 0))
   
-  # Generate Plots
-  names <- babynames %>%
-    filter(name == input$name & year >= input$start_year & year <= input$end_year )
-  ggplot(data=names, aes(x=year, y=prop, col=sex)) + 
+  movies_genre <- movies %>%
+    select_("budget", "rating", input$genre) %>% 
+    filter(!is.na(budget)) %>% 
+    rename_("type"=input$genre) %>% 
+    filter(type == 1)
+  
+  ggplot(movies_genre, aes(x = budget, y = rating)) +
     geom_line()
-  
 })
 ```

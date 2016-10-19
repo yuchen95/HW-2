@@ -180,7 +180,9 @@ ggplot(data = prop_sex_job, aes(
   # facet_wrap(~sex, nrow = 2) +
   labs(title = "Proportion of Each Gender in Each Profession", 
        x = "Profession", y = "Proportion") +
-  coord_flip()
+  coord_flip() +
+  # where p_f should be if H0: p_f=p_m
+  geom_hline(yintercept = mean(profiles$is_female)) 
 ```
 
 ```{r, echo=TRUE, message=TRUE, warning=TRUE, fig.width=8, fig.height=4.5}

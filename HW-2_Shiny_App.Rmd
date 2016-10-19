@@ -41,6 +41,7 @@ renderPlot({
     filter(type == 1)
   
   ggplot(movies_genre, aes(x = budget, y = rating)) +
-    geom_line()
+    geom_point() +
+    scale_x_log10()
 })
 ```
